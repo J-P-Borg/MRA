@@ -1022,7 +1022,7 @@ print (Results)
 
 
 #
-#	Table 5
+#	Table in S.I. (Supplementary table 1)
 #	Standard deviation of diagonal distances from DC4 networks, depending on the percentage of known data (10 simulations each time)
 #
 
