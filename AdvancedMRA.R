@@ -889,12 +889,16 @@ save(Result1G, file=paste(vRootFig, "Fig6a_Result1G.rda", sep="")) 	# To allow f
 
 cat ("Done !", as.character(Sys.time()), "\n")
 
+#	NomFic		<-	paste(vRootFig, "Fig6a_df.rda", sep="")		# in case of replay
+#	load(NomFic)
+
 NomFic 	<- paste(vRootFig, "Fig6a.pdf", sep="")
 pdf(file=NomFic)
 ggplot() +
 	geom_line(data=Res.df, aes(x=pc, y=dd, colour=factor(Fic))) +
+	xlim(0, 100) + ylim(0,1) +
 	xlab("% known values") + ylab("Average distance to the diagonal") + ggtitle("Dist. to the diagonal, for the computed  matrix, InSilico_10_1 to 5") +
-	scale_colour_manual(name="Fic", values=c("10_1"="blue", "10_2"="chartreuse1", "10_3"="brown3", "10_4"="darkgoldenrod3", "10_5"="gray7")) +		
+	scale_colour_manual(name="Fic", values=c("10_1"="blue", "10_2"="chartreuse1", "10_3"="brown3", "10_4"="darkgoldenrod3", "10_5"="gray7")) +
 	theme(axis.text.x = element_text(color="black")) +
 	theme(axis.text.y = element_text(color="black")) +
 	theme(text = element_text(size = 10))
@@ -985,10 +989,14 @@ save(Result1G, file=paste(vRootFig, "Fig6b_Result1G.rda", sep="")) 	# To allow f
 
 cat ("Done !", as.character(Sys.time()), "\n")					# Length of processing : 2h. 45 min.
 
+#	NomFic		<-	paste(vRootFig, "Fig6b_df.rda", sep="")		# in case of replay
+#	load(NomFic)
+
 NomFic 	<- paste(vRootFig, "Fig6b.pdf", sep="")
 pdf(file=NomFic)
 ggplot() +
 	geom_line(data=Res.df, aes(x=pc, y=dd, colour=factor(Fic))) +
+	xlim(0, 100) + ylim(0,1) +
 	xlab("% known values") + ylab("Average distance to the diagonal") + ggtitle("Dist. to the diagonal, for the computed  matrix, InSilico_100_1 to 5") +
 	scale_colour_manual(name="Fic", values=c("100_1"="blue", "100_2"="chartreuse1", "100_3"="brown3", "100_4"="darkgoldenrod3", "100_5"="gray7")) +		
 	theme(axis.text.x = element_text(color="black")) +
@@ -1034,7 +1042,7 @@ print (Results)
 
 #
 #	Figure 7
-#	Average distances between solutions and calculated matrices, FRANK generated networks (30, 60, 100 nodes), 
+#	Mean of distances between solutions and calculated matrices, FRANK generated networks (30, 60, 100 nodes), 
 #	based on percentage of known data and noise level	(ribbon : ± standard deviation)
 #
 
@@ -1117,7 +1125,8 @@ nbD			<- 10				# Number of trials
 Noises		<- c(0.1, 0.5)		# Error coefficients
 nbT			<- length(Noises)
 
-PcKV		<- seq(0, 100, by=20)							# Percentage of known values
+#	PcKV		<- seq(0, 100, by=20)							# Percentage of known values
+PcKV		<- c(0, 20, 40, 60, 70, 75, 80, 85, 90, 100)	# Percentage of known values
 nbPcKV		<- length(PcKV)
 HCvx		<- 0.1											# KnlgMap\[i,j\] =  "1" means r\[i,j\] >=  HCvx			vs 0.5
 
@@ -1198,6 +1207,9 @@ save(Result1G, file=paste(vRootFig, "Fig7_Result1G.rda", sep="")) 	# To allow fo
 
 cat ("Done !", as.character(Sys.time()), "\n")			# Length of processing : 7 hours
 
+#	NomFic		<-	paste(vRootFig, "Fig7_df.rda", sep="")		# in case of replay
+#	load(NomFic)
+
 #
 #	Figure 7a	(k=0.1 : medium noise  -- Gaussian noise N(0,sd), with sd = 0.1* mean(abs(MatR))
 #
@@ -1209,8 +1221,8 @@ Res1_2.df	<- subset(Res1.df, Set == 2)			# TF60,  TA0
 Res1_3.df	<- subset(Res1.df, Set == 3)			# TF100, TA0
 
 pdf(file=NomFic)
-ggplot() +
-	geom_line(data=Res1.df, aes(x=pc, y=dd, colour=factor(Set))) +
+ggplot(data=Res1.df) +
+	geom_line(aes(x=pc, y=dd, colour=factor(Set))) + geom_point(aes(x=pc, y=dd, colour=factor(Set))) +
 	xlab("% known values") + ylab("Average distance between Solution and Calculated Matrix") + ggtitle("Dist. between Solution and Calculated Matrix : \nFRANK  TF = 30, 60, 100, TA = 0, medium noise (k = 0.1)") +
 	scale_colour_manual(name="Set", values=c("1"="blue", "2"="chartreuse1", "3"="brown3")) +
 	geom_ribbon(data=Res1_1.df, aes(x=pc, ymin=ddM, ymax=ddP), fill="cadetblue1", 		alpha=0.3) +		# Ribbon around a "blue" line
@@ -1220,6 +1232,7 @@ ggplot() +
 	theme(axis.text.y = element_text(color="black")) +
 	theme(text = element_text(size = 10))
 dev.off()
+
 
 #	Now, open "Fig7a.pdf" with Inkscape, arrange the image (font size ...) and export it as . png 600 dpi
 
@@ -1235,8 +1248,8 @@ Res2_2.df	<- subset(Res2.df, Set == 2)			# TF60,  TA0
 Res2_3.df	<- subset(Res2.df, Set == 3)			# TF100, TA0
 
 pdf(file=NomFic)
-ggplot() +
-	geom_line(data=Res2.df, aes(x=pc, y=dd, colour=factor(Set))) +
+ggplot(data=Res2.df) +
+	geom_line(aes(x=pc, y=dd, colour=factor(Set))) + geom_point(aes(x=pc, y=dd, colour=factor(Set))) +
 	xlab("% known values") + ylab("Average distance between Solution and Calculated Matrix") + ggtitle("Dist. between Solution and Calculated Matrix : \nFRANK  TF = 30, 60, 100, TA = 0, strong noise (k = 0.5)") +
 	scale_colour_manual(name="Set", values=c("1"="blue", "2"="chartreuse1", "3"="brown3")) +
 	geom_ribbon(data=Res2_1.df, aes(x=pc, ymin=ddM, ymax=ddP), fill="cadetblue1", 		alpha=0.3) +		# Ribbon around a "blue" line
@@ -1249,36 +1262,36 @@ dev.off()
 
 #	Now, open "Fig7b.pdf" with Inkscape, arrange the image (font size ...) and export it as . png 600 dpi
 
-print (Results)
+print (Results)			# HCvx = 0.1
 ###		, , 1, 0.1
-###		              0         20         40         60        80 100
-###		Mean 0.53807802 0.47931241 0.42105042 0.36076668 0.3017738   0
-###		Std  0.08544347 0.07402877 0.05671406 0.04687009 0.0337981   0
+###		              0         20         40         60         70         75        80         85         90 100
+###		Mean 0.53807802 0.47931241 0.42105042 0.36076668 0.33247764 0.31488497 0.3017738 0.28448718 0.26918802   0
+###		Std  0.08544347 0.07402877 0.05671406 0.04687009 0.04055174 0.03070697 0.0337981 0.02930777 0.02995866   0
 ###		
 ###		, , 2, 0.1
-###		             0        20        40         60         80 100
-###		Mean 1.0353508 0.9049661 0.7676512 0.62839205 0.48523493   0
-###		Std  0.1908226 0.1543061 0.1188528 0.09210166 0.08504167   0
+###		             0        20        40         60         70         75         80         85         90 100
+###		Mean 1.0353508 0.9049661 0.7676512 0.62839205 0.55601017 0.52201204 0.48523493 0.44878167 0.40801018   0
+###		Std  0.1908226 0.1543061 0.1188528 0.09210166 0.08235533 0.08405417 0.08504167 0.08811403 0.09344986   0
 ###		
 ###		, , 3, 0.1
-###		             0        20        40         60         80 100
-###		Mean 1.4007063 1.2159082 1.0310414 0.84351896 0.65077541   0
-###		Std  0.2426198 0.1921912 0.1415155 0.08545041 0.02780376   0
+###		             0        20        40         60         70         75         80         85         90 100
+###		Mean 1.4007063 1.2159082 1.0310414 0.84351896 0.74642371 0.69860734 0.65077541 0.60270061 0.55086317   0
+###		Std  0.2426198 0.1921912 0.1415155 0.08545041 0.05557987 0.04096395 0.02780376 0.01807879 0.02133163   0
 ###		
 ###		, , 1, 0.5
-###		             0        20        40        60        80 100
-###		Mean 2.5157277 2.2024860 1.9067644 1.6085473 1.3314153   0
-###		Std  0.4109394 0.3443972 0.2604825 0.2141473 0.1614541   0
+###		             0        20        40        60        70       75        80        85        90 100
+###		Mean 2.5157277 2.2024860 1.9067644 1.6085473 1.4637924 1.393486 1.3314153 1.2514910 1.1793241   0
+###		Std  0.4109394 0.3443972 0.2604825 0.2141473 0.1881081 0.166817 0.1614541 0.1352178 0.1308682   0
 ###		
 ###		, , 2, 0.5
-###		             0        20        40        60        80 100
-###		Mean 4.5994789 3.9926712 3.3858568 2.7931957 2.1906105   0
-###		Std  0.7315105 0.6155399 0.5076789 0.4252225 0.3289608   0
+###		             0        20        40        60        70        75        80        85        90 100
+###		Mean 4.5994789 3.9926712 3.3858568 2.7931957 2.4956462 2.3483971 2.1906105 2.0385159 1.8787370   0
+###		Std  0.7315105 0.6155399 0.5076789 0.4252225 0.3637757 0.3612954 0.3289608 0.3136359 0.2898417   0
 ###		
 ###		, , 3, 0.5
-###		             0        20       40        60        80 100
-###		Mean 6.2720540 5.3615645 4.507470 3.6680857 2.8150817   0
-###		Std  0.8457015 0.7125749 0.606942 0.5063534 0.4060037   0
+###		             0        20       40        60        70        75        80       85        90 100
+###		Mean 6.2720540 5.3615645 4.507470 3.6680857 3.2451102 3.0335027 2.8150817 2.601215 2.3601429   0
+###		Std  0.8457015 0.7125749 0.606942 0.5063534 0.4631001 0.4361872 0.4060037 0.383213 0.3351266   0
 
 
 #
@@ -1429,6 +1442,8 @@ save(Result1G, file=paste(vRootFig, "Fig8_Result1G.rda", sep="")) 	# To allow fo
 
 cat ("Done !", as.character(Sys.time()), "\n")			# Length of processing : 19 hours
 
+#	NomFic		<-	paste(vRootFig, "Fig8_df.rda", sep="")		# in case of replay
+#	load(NomFic)
 
 #
 #	Figure 8a	(k=0.1 : medium noise  -- Gaussian noise N(0,sd), with sd = 0.1* mean(abs(MatR))
@@ -1440,8 +1455,8 @@ Res1_2.df	<- subset(Res1.df, Set == 10)			# TF50,  TA50
 Res1_3.df	<- subset(Res1.df, Set == 11)			# TF100, TA100
 
 pdf(file=NomFic)
-ggplot() +
-	geom_line(data=Res1.df, aes(x=pc, y=dd, colour=factor(Set))) +
+ggplot(data=Res1.df) +
+	geom_line(aes(x=pc, y=dd, colour=factor(Set))) + geom_point(aes(x=pc, y=dd, colour=factor(Set))) +
 	xlab("% known TA nodes") + ylab("Average distance between Solution and Calculated Matrix") + ggtitle("Dist. between Solution and Calculated Matrix : \nFRANK  TA = TF = 30, 50, 100, medium noise (k = 0.1)") +
 	scale_colour_manual(name="Set", values=c("9"="blue", "10"="chartreuse1", "11"="brown3")) +
 	geom_ribbon(data=Res1_1.df, aes(x=pc, ymin=ddM, ymax=ddP), fill="cadetblue1", 		alpha=0.3) +		# Ribbon around a "blue" line
@@ -1465,8 +1480,8 @@ Res2_2.df	<- subset(Res2.df, Set == 10)			# TF50,  TA50
 Res2_3.df	<- subset(Res2.df, Set == 11)			# TF100, TA100
 
 pdf(file=NomFic)
-ggplot() +
-	geom_line(data=Res2.df, aes(x=pc, y=dd, colour=factor(Set))) +
+ggplot(data=Res2.df) +
+	geom_line(aes(x=pc, y=dd, colour=factor(Set))) + geom_point(aes(x=pc, y=dd, colour=factor(Set))) +
 	xlab("% known TA nodes") + ylab("Average distance between Solution and Calculated Matrix") + ggtitle("Dist. between Solution and Calculated Matrix : \nFRANK  TA = TF = 30, 50, 100, strong noise (k = 0.5)") +
 	scale_colour_manual(name="Set", values=c("9"="blue", "10"="chartreuse1", "11"="brown3")) +
 	geom_ribbon(data=Res2_1.df, aes(x=pc, ymin=ddM, ymax=ddP), fill="cadetblue1", 		alpha=0.3) +		# Ribbon around a "blue" line
